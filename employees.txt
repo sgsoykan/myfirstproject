@@ -1,0 +1,25 @@
+#!/bin/sh
+# open
+
+EDITOR="exec subl.exe"
+BROWSER="/c/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+
+if [ -d "$1" ]; then
+    exec explorer.exe $(cygpath -w "$1")
+elif [ -f "$1" ]; then
+    path=$(cygpath --windows "$1")
+    case "$1" in
+    *.xml) $EDITOR "$1";;
+    *.txt) $EDITOR "$1";;
+    *.html) "$BROWSER" "$path";;
+    file://*) "$BROWSER" "$path";;
+    http://*) "$BROWSER" "$path";;
+    https://*) "$BROWSER" "$path";;
+    esac
+else
+    # TODO non-existent file/dir
+    echo "non existent file: $1"
+    exit 1
+fi
+
+exit 0
